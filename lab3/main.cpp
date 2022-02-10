@@ -5,25 +5,34 @@
 
 int main()
 {
-  std::cout << "Hello, World!" << std::endl;
-  double *yp = new double[2]{0, 0};
-  //void RKF45(void(F)(REAL T,REAL*Y,REAL*YP),int NEQN,REAL *Y,REAL &T,REAL TOUT,REAL &RELERR,REAL &ABSERR,REAL *WORK,int &IFLAG)
+  std::cout.precision(10);
+
+  double tout = 0.0;
   void (*ff)(double, double *, double *) = reinterpret_cast<void (*)(double, double *, double *)>(f);
-  int neqn = 2;
-  double *y = new double[2]{-3, 1};
-  double *t = new double[2]{0, 1};
-  double tt = 0.0;
-  double tout = 1.0;
   double relerr = eps;
   double abserr = eps;
-  double *work = new double[30]; // array [1..6*NEQN+3]
-  int iflag = 1;
+  double y[2] = {-3, 1};
+  double yy[2] = {0, 0};
+  double work[30] = {0};
+  int neqn = 2;
+  while (tout < 1.0 + eps) {
+    double t = 0.0;
+    yy[0] = y[0];
+    yy[1] = y[1];
+    int iflag = 1;
 
-  RKF45(ff, neqn, y, tt, tout, relerr, abserr, work, iflag);
+    RKF45(ff, neqn, yy, t, tout, relerr, abserr, work, iflag);
 
-  std::cout << " Y = " << y[0] << "   " << y[1] << '\n';
-  std::cout << " t = " << tt << '\n';
-  std::cout << " iflag = " << iflag << '\n';
+    std::cout << " Y = " << yy[0] << "   " << yy[1];
+    std::cout << " | t = " << t;
+    std::cout << " | iflag = " << iflag;
+    std::cout << " | tout = " << tout;
+    std::cout << '\n';
+
+    tout += h_print;
+
+  }
+
 
   return 0;
 }
