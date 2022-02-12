@@ -5,9 +5,9 @@
 
 void out(double t, double *y)
 {
-  std::cout << "t = " << std::setw(5) << t;
-  std::cout << "y[0] = " << std::setw(10) << y[0];
-  std::cout << "y[1] = " << std::setw(10) << y[1] << '\n';
+  std::cout << "t = " << std::setw(10) << t;
+  std::cout << std::setw(15) << "y[0] = " << std::setw(15) << y[0];
+  std::cout << std::setw(15) << "y[1] = " << std::setw(15) << y[1] << '\n';
 }
 
 void rkf()
@@ -20,9 +20,7 @@ void rkf()
     double t = 0.0;
     double func[2] = {y[0], y[1]};
     RKF45(f_ptr, neqn, func, t, tout, eps, eps, work, iflag);
-    std::cout << "tout = " << tout;
-    std::cout << "\t| func[1] = " << func[0] << "\t| func[2] = " << func[1];
-    std::cout << "\t| iflag = " << iflag << '\n';
+    out(t, func);
     tout += h_print;
   }
 }
@@ -42,19 +40,22 @@ void adams(const double h)
 
   double z[2] = {y_h[0], y_h[1]};
   for (double t = 0.025; t <= 1.0 - h + eps; t += h) {
-
     z[0] = z[0] + h * (3 * dx1_dt(z[0], z[1], t) - dx1_dt(z[0], z[1], t - h)) / 2;
     z[1] = z[1] + h * (3 * dx2_dt(z[0], t) - dx2_dt(z[0], t - h)) / 2;
 
-    std::cout << "t = " << std::setw(5) << t << "\t z[0] = " << std::setw(15) << z[0];
-    std::cout << "\t z[1] = " << std::setw(15) << z[0] << '\n';
+    out(t, z);
   }
 }
 
 int main()
 {
   std::cout.precision(10);
+
+  std::cout << "RKF45" << '\n';
   rkf();
+
+  std::cout << "ADAMS" << '\n';
   adams(h_int);
+
   return 0;
 }
