@@ -4,10 +4,10 @@
 #include <cmath>
 #include <FORSYTHE.H>
 
-
- double h_print = 0.05;
- double eps = 0.0001;
- double h_int = 0.025;
+double h_print = 0.05;
+double eps = 0.0001;
+double h_int = 0.025;
+double y[2] = {-3, 1};
 
 double dx1_dt(const double x1, const double x2, const double t)
 {
@@ -26,5 +26,7 @@ void f(const double t, const double *y, double *yp)
   yp[0] = dx1_dt(y[0], y[1], t);
   yp[1] = dx2_dt(y[0], t);
 }
+
+void (*f_ptr)(double, double *, double *) = reinterpret_cast<void (*)(double, double *, double *)>(f);
 
 #endif
