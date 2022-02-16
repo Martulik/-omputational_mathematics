@@ -39,11 +39,17 @@ void adams(const double h)
   f(h, y_h, f_1);
 
   double z[2] = {y_h[0], y_h[1]};
-  for (double t = 0.025; t <= 1.0 - h + eps; t += h) {
-    z[0] = z[0] + h * (3 * dx1_dt(z[0], z[1], t) - dx1_dt(z[0], z[1], t - h)) / 2;
-    z[1] = z[1] + h * (3 * dx2_dt(z[0], t) - dx2_dt(z[0], t - h)) / 2;
+  bool out_flag = true;
+  for (double t = h; t <= 1.0 - h + eps; t += h) {
+    z[0] += h * (3 * dx1_dt(z[0], z[1], t) - dx1_dt(z[0], z[1], t - h)) / 2;
+    z[1] += h * (3 * dx2_dt(z[0], t) - dx2_dt(z[0], t - h)) / 2;
 
-    out(t, z);
+    if (out_flag) {
+      out(t + h, z);
+      out_flag = false;
+    } else {
+      out_flag = true;
+    }
   }
 }
 
@@ -54,8 +60,11 @@ int main()
   std::cout << "RKF45" << '\n';
   rkf();
 
-  std::cout << "ADAMS" << '\n';
+  std::cout << "ADAMS h_int = " << h_int << '\n';
   adams(h_int);
+
+  std::cout << "ADAMS h_int = " << 0.01 << '\n';
+  adams(0.01);
 
   return 0;
 }
