@@ -5,7 +5,7 @@
 
 double eps = 0.00001;
 const double g = 9.81;
-const int M = 1;
+double M = 1.0;
 double k_global = 0.0;
 const int N = 7;
 const double x_exp[7] = {0.0, 0.303, -0.465, 0.592, -0.409, 0.164, 0.180};
@@ -58,7 +58,6 @@ void x_mod_fill()
 double f_k(double k)
 {
   k_global = k;
-  //std::cout << "F(K): k = " << k << '\n';
   double sum = 0.0;
   x_mod_fill();
   for (int i = 1; i < N; ++i) {

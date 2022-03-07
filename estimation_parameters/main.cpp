@@ -1,17 +1,38 @@
 #include <iostream>
-#include <iomanip>
 #include "data.hpp"
+
+void make_table(double k)
+{
+  k_global = k;
+  x_mod_fill();
+  for (double i : x_mod) {
+    std::cout << i << ' ';
+  }
+  std::cout << '\n';
+}
 
 int main()
 {
-  double k = FMIN(36, 46, f_k, 0.0001);
+  std::cout.precision(10);
 
-  std::cout << "k = " << std::fixed << std::setprecision(10) << k << '\n';
-  std::cout << "f(k + 0.2) = " << std::fixed << std::setprecision(10) << f_k(k + 0.2) << '\n';
-  std::cout << "f(k + 0.1) = " << std::fixed << std::setprecision(10) << f_k(k + 0.1) << '\n';
-  std::cout << "f(k) = " << std::fixed << std::setprecision(10) << f_k(k) << '\n';
-  std::cout << "f(k - 0.1) = " << std::fixed << std::setprecision(10) << f_k(k - 0.1) << '\n';
-  std::cout << "f(k - 0.2) = " << std::fixed << std::setprecision(10) << f_k(k - 0.2) << '\n';
+  double k = FMIN(36, 46, f_k, 0.0001);
+  std::cout << "k = " << k << '\n';
+  make_table(k);
+
+  double k_bad = k * 0.99;
+  std::cout << "k - 1% = " << k_bad << '\n';
+  make_table(k_bad);
+  k_bad = k * 1.01;
+  std::cout << "k + 1% = " << k_bad << '\n';
+  make_table(k_bad);
+
+  std::cout << "k = " << k << '\n';
+  M = 0.99;
+  std::cout << "M - 1% = " << M << '\n';
+  make_table(k);
+  M = 1.01;
+  std::cout << "M + 1% = " << M << '\n';
+  make_table(k);
 
   return 0;
 }
